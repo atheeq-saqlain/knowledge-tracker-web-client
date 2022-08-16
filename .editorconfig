@@ -22,7 +22,7 @@ curly_bracket_next_line = true
 indent_size = 4
 
 [*.{js,ts}]
-quote_type = single
+quote_type = double
 
 [*.md]
 trim_trailing_whitespace = false
