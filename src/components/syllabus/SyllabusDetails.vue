@@ -56,6 +56,18 @@
                   <div class="row justify-center">
                     <q-btn class="text-primary" outline v-on:click="SHOW_QUESTION_FORM = true">Add Question</q-btn>
                   </div>
+
+                  <q-dialog v-model="SHOW_QUESTION_FORM">
+                    <q-card style="width: 80vw">
+                      <q-card-section>
+                        <question-form
+                          :syllabus-id="syllabusId"
+                          :section="section"
+                          @question-added="addCreatedQuestion"
+                        ></question-form>
+                      </q-card-section>
+                    </q-card>
+                  </q-dialog>
                 </div>
 
                 <!-- add section  -->
@@ -105,17 +117,6 @@
       <q-btn label="Save" v-on:click="updateSyllabus" color="primary" class="fixed-bottom-right q-ma-lg"> </q-btn>
     </div>
 
-    <q-dialog v-model="SHOW_QUESTION_FORM">
-      <q-card style="width: 80vw">
-        <q-card-section>
-          <question-form
-            :syllabus-id="syllabusId"
-            :suggested-concepts-array="syllabus.chapters[0].sections[0].concepts"
-            @question-added="getSyllabus"
-          ></question-form>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
     <q-dialog v-model="SHOW_CONCEPT_FORM">
       <q-card>
         <q-card-section>
@@ -344,11 +345,15 @@ export default defineComponent({
   },
   methods: {
     async getSyllabusById() {
-      console.log("getting syllabus ");
       // get syllabus detials from id
       let res = await SyllabusApi.getSyllabusById(this.syllabusId);
-      console.log("got syllabus from id : ", res);
       this.syllabus = res;
+    },
+
+    async addCreatedQuestion(quesiton, section) {
+      section.questions.push(quesiton);
+      this.SHOW_QUESTION_FORM = false;
+      await this.updateSyllabus();
     },
 
     async updateSyllabus() {
