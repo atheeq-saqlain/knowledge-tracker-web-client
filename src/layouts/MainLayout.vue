@@ -2,18 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-toolbar-title> Learning Tracker App </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -21,11 +12,7 @@
       <q-list>
         <q-item-label header> Essential Links </q-item-label>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
       </q-list>
     </q-drawer>
 
@@ -41,22 +28,22 @@ import EssentialLink from "components/EssentialLink.vue";
 
 const linksList = [
   {
-    title: "Docs",
-    caption: "quasar.dev",
+    title: "Test page",
+    caption: "test componets here",
     icon: "school",
-    link: "https://quasar.dev",
+    link: "test-component",
   },
   {
-    title: "Github",
-    caption: "github.com/quasarframework",
+    title: "Syllabus",
+    caption: "Manage syllabus",
     icon: "code",
-    link: "https://github.com/quasarframework",
+    link: "syllabus",
   },
   {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
+    title: "Students",
+    caption: "View and manage students",
     icon: "chat",
-    link: "https://chat.quasar.dev",
+    link: "students",
   },
   {
     title: "Forum",
