@@ -37,8 +37,19 @@
 
                   <!-- add concept button -->
                   <div class="row justify-center">
-                    <q-btn class="text-primary" v-on:click="SHOW_CONCEPT_FORM = true" outline>Add concept</q-btn>
+                    <q-btn class="text-primary" v-on:click="openConceptModal(section)" outline>Add concept</q-btn>
                   </div>
+
+                  <q-dialog v-model="SHOW_CONCEPT_FORM">
+                    <q-card style="width: 80vw">
+                      <q-card-section>
+                        <concept-form
+                          @concept-selected="addConceptToSeciton"
+                          :subject="syllabus.subject"
+                        ></concept-form>
+                      </q-card-section>
+                    </q-card>
+                  </q-dialog>
 
                   <q-separator class="q-my-md" />
 
@@ -54,7 +65,7 @@
 
                   <!-- add question button -->
                   <div class="row justify-center">
-                    <q-btn class="text-primary" outline v-on:click="SHOW_QUESTION_FORM = true">Add Question</q-btn>
+                    <q-btn class="text-primary" outline v-on:click="openQuestionModal(section)">Add Question</q-btn>
                   </div>
 
                   <q-dialog v-model="SHOW_QUESTION_FORM">
@@ -62,8 +73,8 @@
                       <q-card-section>
                         <question-form
                           :syllabus-id="syllabusId"
-                          :section="section"
-                          @question-added="addCreatedQuestion"
+                          :suggested-concepts="section"
+                          @question-added="addQuestionToSection"
                         ></question-form>
                       </q-card-section>
                     </q-card>
@@ -116,15 +127,6 @@
       </div>
       <q-btn label="Save" v-on:click="updateSyllabus" color="primary" class="fixed-bottom-right q-ma-lg"> </q-btn>
     </div>
-
-    <q-dialog v-model="SHOW_CONCEPT_FORM">
-      <q-card>
-        <q-card-section>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt, molestias fugit illo nisi id dolorem fuga,
-          assumenda autem quasi odio inventore? Iure tenetur, cumque commodi labore quasi ipsa explicabo architecto.
-        </q-card-section>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
@@ -133,6 +135,7 @@ import SyllabusApi from "src/services/api/Syllabus.api";
 import { defineComponent } from "vue";
 import { useQuasar } from "quasar";
 import QuestionForm from "../questions/QuestionForm.vue";
+import ConceptForm from "../concepts/ConceptForm.vue";
 
 const sampleSyllabus = {
   name: "10th ICSE Math",
@@ -326,34 +329,55 @@ export default defineComponent({
   //     syllabus: sampleSyllabus,
   //   };
   // },
-  components: { QuestionForm },
+  components: { QuestionForm, ConceptForm },
   data() {
     return {
       SHOW_QUESTION_FORM: false,
       SHOW_CONCEPT_FORM: false,
+
       SHOW_CHAPTER_INPUT: false,
       newChapterName: "",
+      editedChapterTitle: "",
+
       SHOW_SECTION_INPUT: false,
-      newSectionTitle: "",
-      syllabus: null,
       editedSectionTitle: "",
+      newSectionTitle: "",
+      managedSection: null,
+      syllabus: null,
     };
   },
   async mounted() {
-    console.log("syllabus id : ", this.syllabusId);
     await this.getSyllabusById();
   },
   methods: {
     async getSyllabusById() {
-      // get syllabus detials from id
       let res = await SyllabusApi.getSyllabusById(this.syllabusId);
       this.syllabus = res;
     },
 
-    async addCreatedQuestion(quesiton, section) {
-      section.questions.push(quesiton);
+    openQuestionModal(section) {
+      this.managedSection = section;
+      this.SHOW_QUESTION_FORM = true;
+    },
+
+    openConceptModal(section) {
+      this.managedSection = section;
+      this.SHOW_CONCEPT_FORM = true;
+    },
+
+    async addQuestionToSection(quesiton) {
+      this.managedSection.questions.push(quesiton);
+      this.managedSection = null;
       this.SHOW_QUESTION_FORM = false;
       await this.updateSyllabus();
+    },
+
+    async addConceptToSeciton(concept) {
+      console.log(concept);
+      this.managedSection.concepts.push(concept);
+      this.SHOW_CONCEPT_FORM = false;
+      this.managedSection = null;
+      // this.updateSyllabus();
     },
 
     async updateSyllabus() {
@@ -361,7 +385,7 @@ export default defineComponent({
     },
 
     showConfirmationDialog() {
-      // Need to add dialoge to decide if we need to remove the questions and concepts if the chapter or seciton is deleted
+      // Need to add dialoge to decide if we need to remove the questions and concepts if the chapter or section is deleted
     },
 
     confirmChapterName() {

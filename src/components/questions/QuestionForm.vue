@@ -5,7 +5,7 @@
       <q-input v-model="questionStatment" label="Question statment" filled type="textarea" autogrow />
       <q-input v-model="correctAnswer" label="Correct Answer" filled type="textarea" autogrow />
       <q-input v-model="description" label="Description" filled type="textarea" autogrow />
-      <select-concept :section-concepts="section.concepts" v-model="concept"></select-concept>
+      <select-concept :section-concepts="suggestedConcepts.concepts" v-model="concept"></select-concept>
       <div>
         <q-btn label="Submit" type="submit" color="primary" />
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
@@ -39,7 +39,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    section: {
+    suggestedConcepts: {
       type: Object,
     },
   },
@@ -54,7 +54,7 @@ export default defineComponent({
         coreConcept: this.concept._id,
       };
       let addedQuestion = await QuestionsApi.addQuesiton(newQuestion);
-      this.$emit("questionAdded", addedQuestion, this.section);
+      this.$emit("questionAdded", addedQuestion);
     },
 
     resetQuestionForm() {

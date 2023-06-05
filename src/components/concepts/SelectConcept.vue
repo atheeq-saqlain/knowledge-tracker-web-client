@@ -5,7 +5,7 @@
       v-model="concept"
       use-input
       input-debounce="0"
-      label="Concept"
+      label="Existing Concept"
       :options="concepts"
       @filter="filterFn"
       option-value="name"
