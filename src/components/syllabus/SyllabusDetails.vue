@@ -325,9 +325,14 @@ export default defineComponent({
   name: "SyllabusDetails",
   props: ["syllabusId"],
   // setup() {
-  //   return {
-  //     syllabus: sampleSyllabus,
-  //   };
+  //   const $q = useQuasar();
+  //   function showUpdateSuccess() {
+  //     $q.dialog({
+  //       title: "success",
+  //       message: "Syllabus saved successfully ",
+  //     });
+  //   }
+  //   return { showUpdateSuccess };
   // },
   components: { QuestionForm, ConceptForm },
   data() {
@@ -382,6 +387,20 @@ export default defineComponent({
 
     async updateSyllabus() {
       this.syllabus = await SyllabusApi.updateSyllabus(this.syllabus);
+      this.showUpdateSuccess();
+    },
+
+    showUpdateSuccess() {
+      let dialog = this.$q
+        .dialog({
+          // title: "Success",
+          message: "Syllabus saved successfully!",
+          color: "blue",
+        })
+        .onOk(() => console.log("saved"));
+      setTimeout(() => {
+        dialog.hide();
+      }, 3000);
     },
 
     showConfirmationDialog() {
