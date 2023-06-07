@@ -400,7 +400,7 @@ export default defineComponent({
         .onOk(() => console.log("saved"));
       setTimeout(() => {
         dialog.hide();
-      }, 3000);
+      }, 1000);
     },
 
     showConfirmationDialog() {

@@ -52,7 +52,7 @@ export default {
   },
 
   async mounted() {
-    this.educationBoards = (await EducationBoardApi.listEducationBoard()).data;
+    this.educationBoards = await EducationBoardApi.listEducationBoards();
     // console.log("education boards ", this.educationBoards);
 
     this.syllabusList = await SyllabusApi.getSyllabus();

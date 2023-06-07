@@ -37,7 +37,6 @@ export default {
     return {
       concept: null,
       concepts: [],
-      strings: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
     };
   },
 
@@ -54,7 +53,6 @@ export default {
       }
 
       update(async () => {
-        const needle = val.toLowerCase();
         this.concepts = await ConceptsApi.searchConcepts(val);
       });
     },

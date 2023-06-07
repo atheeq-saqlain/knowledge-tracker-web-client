@@ -1,7 +1,7 @@
 import { api } from "src/boot/axios";
 
 export default {
-  listEducationBoard() {
-    return api.get("education-board");
+  async listEducationBoards() {
+    return (await api.get("education-board")).data;
   },
 };

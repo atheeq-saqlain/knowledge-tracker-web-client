@@ -2,6 +2,9 @@ import { api } from "src/boot/axios";
 // import axios from "axios";
 
 export default {
+  async createSyllabus(body) {
+    return (await api.post("syllabus", body)).data;
+  },
   async getSyllabus() {
     return (await api.get("syllabus")).data;
   },
