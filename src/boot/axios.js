@@ -10,7 +10,7 @@ import axios from "axios";
 
 // const baseURL = "https://api.example.com"
 const baseURL = "http://localhost:3000";
-const api = axios.create({ baseURL: baseURL });
+const api = axios.create({ baseURL: baseURL, withCredentials: true });
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

@@ -11,12 +11,17 @@ const routes = [
       {
         path: "syllabus",
         component: () => import("pages/SyllabusManager.vue"),
+        meta: { requiresAuth: true },
       },
       {
         path: "test-component",
         component: () => import("pages/TestComponents.vue"),
       },
     ],
+  },
+  {
+    path: "/login",
+    component: () => import("layouts/LoginLayout.vue"),
   },
 
   // Always leave this as last one,

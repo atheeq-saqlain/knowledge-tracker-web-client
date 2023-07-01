@@ -5,6 +5,7 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Learning Tracker App </q-toolbar-title>
+        <logout-button></logout-button>
       </q-toolbar>
     </q-header>
 
@@ -25,6 +26,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import EssentialLink from "components/EssentialLink.vue";
+import LogoutButton from "src/components/authentication/LogoutButton.vue";
 
 const linksList = [
   {
@@ -76,6 +78,7 @@ export default defineComponent({
 
   components: {
     EssentialLink,
+    LogoutButton,
   },
 
   setup() {
