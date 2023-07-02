@@ -428,6 +428,8 @@ export default defineComponent({
     confirmSectionTitle(chapter) {
       chapter.sections.push({
         title: this.newSectionTitle,
+        concepts: [],
+        questions: [],
       });
       this.closeNewSectionInput();
     },
