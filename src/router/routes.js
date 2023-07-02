@@ -1,6 +1,11 @@
 const routes = [
   {
+    // Landing page layout
     path: "/",
+    component: () => import("layouts/IndexLayout.vue"),
+  },
+  {
+    path: "/admin",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       { path: "", component: () => import("pages/IndexPage.vue") },

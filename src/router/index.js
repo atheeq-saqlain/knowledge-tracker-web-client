@@ -29,18 +29,15 @@ export default route(function ({ store /* , ssrContext  */ }) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach((to, from, next) => {
-    const user = userStore();
-    console.log("user : ", user.$state.user);
-    const loggedIn = user.$state.user;
-
-    console.log(" to route info : ", to.matched);
-    // next();
+  Router.beforeEach(async (to, from, next) => {
+    const userstore = userStore();
+    let loggedIn = userstore.$state.user;
 
     if (to.matched.some((record) => record.meta.requiresAuth) && !loggedIn) {
-      next("/login");
-      // } else if (to.matched.some((record) => record.meta.requiresVisitor) && loggedIn) {
-      //   next("/");
+      loggedIn = await userstore.checkLoggedInUser();
+      if (loggedIn) {
+        next();
+      } else next("/login");
     } else {
       next();
     }

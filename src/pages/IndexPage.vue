@@ -14,7 +14,7 @@ export default defineComponent({
 
   mounted() {
     // hit the check login api and
-    store.checkLoggedInUserAndRoute();
+    store.checkLoggedInUserAndRouteToUserHome();
   },
 });
 </script>

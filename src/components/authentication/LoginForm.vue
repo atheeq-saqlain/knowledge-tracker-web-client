@@ -52,7 +52,7 @@ export default {
           });
           store.user = user;
           store.isAuthenticated = true;
-          router.push("/syllabus");
+          router.push("/admin/syllabus");
         } catch (error) {
           console.log(error);
         }
