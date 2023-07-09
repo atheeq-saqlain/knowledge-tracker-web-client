@@ -16,13 +16,25 @@ const routes = [
       {
         path: "syllabus",
         component: () => import("pages/SyllabusManager.vue"),
-        meta: { requiresAuth: true },
       },
       {
         path: "test-component",
         component: () => import("pages/TestComponents.vue"),
       },
     ],
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/content-moderator",
+    component: () => import("layouts/ContentModeratorLayout.vue"),
+    children: [
+      { path: "", component: () => import("pages/IndexPage.vue") },
+      {
+        path: "syllabus",
+        component: () => import("pages/SyllabusManager.vue"),
+      },
+    ],
+    meta: { requiresAuth: true },
   },
   {
     path: "/login",

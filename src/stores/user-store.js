@@ -26,13 +26,22 @@ export const userStore = defineStore("user", {
         foundUser = await this.checkLoggedInUser();
         if (foundUser) {
           // route to the user home page based on role
-          this.router.push("/admin/syllabus");
+          this.routeUserToHome(foundUser);
         } else {
           // route to signin page
         }
       } catch (error) {
         console.log("logged in error : ", error.response);
         // if (error.response.status == 401) this.router.push("/login");
+      }
+    },
+    async routeUserToHome(user) {
+      if (user.roles.includes("admin")) {
+        this.router.push("/admin");
+      } else if (user.roles.includes("content-moderator")) {
+        this.router.push("/content-moderator");
+      } else {
+        this.router.push("login");
       }
     },
   },

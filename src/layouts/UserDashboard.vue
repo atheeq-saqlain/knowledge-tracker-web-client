@@ -3,6 +3,9 @@
 </template>
 
 <script>
+/**
+ * Layout for users(customer)
+ */
 export default {};
 </script>
 

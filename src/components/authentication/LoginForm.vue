@@ -52,7 +52,8 @@ export default {
           });
           store.user = user;
           store.isAuthenticated = true;
-          router.push("/admin/syllabus");
+          // router.push("/admin/syllabus");
+          store.routeUserToHome(user);
         } catch (error) {
           console.log(error);
         }
