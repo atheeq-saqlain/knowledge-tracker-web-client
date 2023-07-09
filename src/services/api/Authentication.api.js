@@ -15,6 +15,6 @@ export default {
   },
 
   async getLoggedInUser() {
-    return (await api.get("users/loggedin")).data;
+    return (await api.get("users/check/loggedin")).data;
   },
 };
