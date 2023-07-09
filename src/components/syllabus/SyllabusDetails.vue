@@ -378,11 +378,10 @@ export default defineComponent({
     },
 
     async addConceptToSeciton(concept) {
-      console.log(concept);
       this.managedSection.concepts.push(concept);
       this.SHOW_CONCEPT_FORM = false;
       this.managedSection = null;
-      // this.updateSyllabus();
+      await this.updateSyllabus();
     },
 
     async updateSyllabus() {
