@@ -33,19 +33,19 @@ const linksList = [
     title: "Test page",
     caption: "test componets here",
     icon: "school",
-    link: "test-component",
+    link: "/admin/test-component",
   },
   {
     title: "Syllabus",
     caption: "Manage syllabus",
     icon: "code",
-    link: "syllabus",
+    link: "/admin/syllabus",
   },
   {
     title: "Students",
     caption: "View and manage students",
     icon: "chat",
-    link: "students",
+    link: "/admin/students",
   },
   {
     title: "Forum",
