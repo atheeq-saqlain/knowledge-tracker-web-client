@@ -5,9 +5,10 @@
       <q-input v-model="questionStatment" label="Question statment" filled type="textarea" autogrow />
       <q-input v-model="correctAnswer" label="Correct Answer" filled type="textarea" autogrow />
       <q-input v-model="description" label="Description" filled type="textarea" autogrow />
-      <select-concept :section-concepts="suggestedConcepts.concepts" v-model="concept"></select-concept>
+      <select-concept :section-concepts="suggestedConcepts.concepts" required v-model="concept"></select-concept>
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn label="Update" v-if="questionId" type="submit" color="primary" />
+        <q-btn label="Submit" v-else type="submit" color="primary" />
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
@@ -32,6 +33,7 @@ export default defineComponent({
       correctAnswer: "",
       description: "",
       concept: null,
+      originalQuestion: null,
     };
   },
   props: {
@@ -42,10 +44,25 @@ export default defineComponent({
     suggestedConcepts: {
       type: Object,
     },
+    questionId: {
+      type: String,
+    },
+  },
+
+  async mounted() {
+    if (this.questionId) {
+      let res = await QuestionsApi.getQuestionById(this.questionId);
+      this.originalQuestion = res;
+      this.resetQuestionForm();
+    }
   },
 
   methods: {
     async submitQuestion() {
+      if (this.questionId) {
+        this.updateQuestion();
+        return;
+      }
       let newQuestion = {
         statement: this.questionStatment,
         correctAnswer: this.correctAnswer,
@@ -58,7 +75,29 @@ export default defineComponent({
     },
 
     resetQuestionForm() {
-      this.questionStatment = null;
+      if (this.questionId) {
+        this.questionStatment = this.originalQuestion.statement;
+        this.correctAnswer = this.originalQuestion.correctAnswer;
+        this.description = this.originalQuestion.description;
+        this.concept = this.originalQuestion.concept;
+      } else {
+        this.questionStatment = "";
+        this.correctAnswer = "";
+        this.description = "";
+        this.concept = null;
+      }
+    },
+
+    async updateQuestion() {
+      let updatedQuestion = {
+        statement: this.questionStatment,
+        correctAnswer: this.correctAnswer,
+        description: this.description,
+        syllabus: this.syllabusId,
+        coreConcept: this.concept._id,
+      };
+      let savedQuestion = await QuestionsApi.updateQuestion(updatedQuestion, this.originalQuestion._id);
+      this.$emit("questionUpdated", savedQuestion);
     },
   },
 });

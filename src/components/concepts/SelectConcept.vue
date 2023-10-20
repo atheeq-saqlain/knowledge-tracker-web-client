@@ -11,6 +11,7 @@
       option-value="name"
       option-label="name"
       @update:model-value="selectedOption"
+      :rules="[validate]"
     >
       <!-- <template v-slot:option="concept">{{ concept.opt.name }}</template> -->
       <template v-slot:no-option>
@@ -30,6 +31,9 @@ export default {
   props: {
     sectionConcepts: {
       type: Array,
+    },
+    required: {
+      type: Boolean,
     },
   },
 
@@ -55,6 +59,13 @@ export default {
       update(async () => {
         this.concepts = await ConceptsApi.searchConcepts(val);
       });
+    },
+
+    validate(val) {
+      if (this.required && !val) {
+        return "Field is required";
+      }
+      return true;
     },
 
     selectedOption(value) {

@@ -58,7 +58,7 @@
                     <q-card-section>
                       <div class="row justify-between">
                         <div>{{ question.statement }}</div>
-                        <q-btn @click="editQuestion">Edit</q-btn>
+                        <q-btn @click="editQuestion(question)">Edit</q-btn>
                       </div>
                     </q-card-section>
                   </q-card>
@@ -75,6 +75,19 @@
                           :syllabus-id="syllabusId"
                           :suggested-concepts="section"
                           @question-added="addQuestionToSection"
+                        ></question-form>
+                      </q-card-section>
+                    </q-card>
+                  </q-dialog>
+
+                  <q-dialog v-model="SHOW_EDIT_QUESTION_FORM">
+                    <q-card style="width: 80vw">
+                      <q-card-section>
+                        <question-form
+                          :question-id="editQuestionId"
+                          :syllabus-id="syllabusId"
+                          :suggested-concepts="section"
+                          @question-updated="getSyllabusById"
                         ></question-form>
                       </q-card-section>
                     </q-card>
@@ -339,6 +352,8 @@ export default defineComponent({
     return {
       SHOW_QUESTION_FORM: false,
       SHOW_CONCEPT_FORM: false,
+      SHOW_EDIT_QUESTION_FORM: false,
+      editQuestionId: null,
 
       SHOW_CHAPTER_INPUT: false,
       newChapterName: "",
@@ -437,9 +452,15 @@ export default defineComponent({
       section.title = this.editedSectionTitle;
       delete section.editTitle;
     },
+    cancelSectionTitleEdit(section) {
+      delete section.editTitle;
+    },
 
     editConcept(concept) {},
-    editQuestion(question) {},
+    editQuestion(question) {
+      this.editQuestionId = question._id;
+      this.SHOW_EDIT_QUESTION_FORM = true;
+    },
   },
 });
 </script>
