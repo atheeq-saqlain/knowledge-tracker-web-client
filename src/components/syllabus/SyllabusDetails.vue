@@ -20,6 +20,7 @@
                   <div v-if="section.editTitle" class="row">
                     <q-input v-model="editedSectionTitle" class="col-10 q-mr-md"></q-input>
                     <q-btn @click="editSectionTitle(section)">ok</q-btn>
+                    <q-btn @click="cancelSectionTitleEdit(section)"> X </q-btn>
                   </div>
                   <div class="text-h6" v-else>
                     {{ section.title }} <q-btn @click="section.editTitle = true" class="q-ml-sm">edit</q-btn>
