@@ -7,30 +7,39 @@
     <div>
       <div class="q-pa-md">
         <q-list bordered>
-          <q-expansion-item
-            v-for="chapter in syllabus.chapters"
-            :key="chapter.title"
-            group="somegroup"
-            icon="explore"
-            :label="chapter.title"
-          >
+          <q-expansion-item v-for="(chapter, index) in syllabus.chapters" :key="index" group="somegroup">
+            <template v-slot:header>
+              <div class="col-11">
+                <div class="row q-gutter-sm">
+                  <div class="col-10">
+                    <q-input dense outlined v-model="chapter.title" type="text" />
+                  </div>
+                  <div class="col-1">
+                    <q-btn @click="removeChapter(syllabus.chapters, index)" icon="delete"></q-btn>
+                  </div>
+                </div>
+              </div>
+            </template>
+
             <q-card>
               <q-card-section class="q-gutter-sm">
                 <div v-for="section in chapter.sections" :key="section.title" class="padding container">
                   <div v-if="section.editTitle" class="row">
-                    <q-input v-model="editedSectionTitle" class="col-10 q-mr-md"></q-input>
-                    <q-btn @click="editSectionTitle(section)">ok</q-btn>
-                    <q-btn @click="cancelSectionTitleEdit(section)"> X </q-btn>
+                    <q-input v-model="editedSectionTitle" class="col-10"></q-input>
+                    <q-btn @click="editSectionTitle(section)" icon="done" class="col-1"></q-btn>
+                    <q-btn @click="cancelSectionTitleEdit(section)" icon="close" class="col-1"></q-btn>
                   </div>
                   <div class="text-h6" v-else>
-                    {{ section.title }} <q-btn @click="section.editTitle = true" class="q-ml-sm">edit</q-btn>
+                    {{ section.title }} <q-btn @click="section.editTitle = true" class="q-ml-sm" icon="edit"></q-btn>
                   </div>
                   <span>concepts </span>
-                  <q-card class="q-my-md" v-for="concept in section.concepts" :key="concept.name">
+                  <q-card class="q-my-md" v-for="(concept, index) in section.concepts" :key="concept.name">
                     <q-card-section>
                       <div class="row justify-between">
                         <div>{{ concept.name }}</div>
-                        <q-btn @click="editConcept">Edit</q-btn>
+                        <div class="q-gutter-sm">
+                          <q-btn @click="removeConcept(section.concepts, index)" icon="delete"></q-btn>
+                        </div>
                       </div>
                       <div>{{ concept.description }}</div>
                     </q-card-section>
@@ -55,11 +64,14 @@
                   <q-separator class="q-my-md" />
 
                   <span>Questions</span>
-                  <q-card class="q-my-md" v-for="question in section.questions" :key="question._id">
+                  <q-card class="q-my-md" v-for="(question, index) in section.questions" :key="question._id">
                     <q-card-section>
                       <div class="row justify-between">
                         <div>{{ question.statement }}</div>
-                        <q-btn @click="editQuestion(question)">Edit</q-btn>
+                        <div class="q-gutter-sm">
+                          <q-btn @click="editQuestion(question)" icon="edit"></q-btn>
+                          <q-btn @click="removeQuesiton(section.questions, index)" icon="delete"></q-btn>
+                        </div>
                       </div>
                     </q-card-section>
                   </q-card>
@@ -73,7 +85,7 @@
                     <q-card style="width: 80vw">
                       <q-card-section>
                         <question-form
-                          :syllabus-id="syllabusId"
+                          :syllabus-id="syllabus._id"
                           :suggested-concepts="section"
                           @question-added="addQuestionToSection"
                         ></question-form>
@@ -86,7 +98,7 @@
                       <q-card-section>
                         <question-form
                           :question-id="editQuestionId"
-                          :syllabus-id="syllabusId"
+                          :syllabus-id="syllabus._id"
                           :suggested-concepts="section"
                           @question-updated="getSyllabusById"
                         ></question-form>
@@ -128,8 +140,8 @@
                   <div class="col-10">
                     <q-input v-model="newChapterName" label="Chapter name" filled type="input" />
                   </div>
-                  <q-btn class="primary" @click="confirmChapterName">ok</q-btn>
-                  <q-btn class="primary" @click="closeNewChapterInput">X</q-btn>
+                  <q-btn class="primary" @click="confirmChapterName" icon="done"></q-btn>
+                  <q-btn class="primary" @click="closeNewChapterInput" icon="cancel"></q-btn>
                 </div>
               </q-card-section>
             </q-card>
@@ -142,198 +154,14 @@
       <q-btn label="Save" v-on:click="updateSyllabus" color="primary" class="fixed-bottom-right q-ma-lg"> </q-btn>
     </div>
   </div>
+  <div v-else>syllabus details</div>
 </template>
 
 <script>
 import SyllabusApi from "src/services/api/Syllabus.api";
 import { defineComponent } from "vue";
-import { useQuasar } from "quasar";
 import QuestionForm from "../questions/QuestionForm.vue";
 import ConceptForm from "../concepts/ConceptForm.vue";
-
-const sampleSyllabus = {
-  name: "10th ICSE Math",
-  description: "10th ICSE Math",
-  grade: "10",
-  _id: "lknsdfnnsdfl232",
-  educationBoard: {
-    name: "Indian secondary board",
-    abbreviation: "ICSE",
-  },
-  subject: "Math",
-  chapters: [
-    {
-      title: "Chapter 1",
-      sections: [
-        {
-          title: "Arithmetic Progression",
-          concepts: [
-            {
-              name: "concept of AP",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              name: "concept of AP 2",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-          questions: [
-            {
-              _id: "241234234",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "24234kjn234",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "sdih87387kjs",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-        },
-        {
-          title: "Arithmetic Progression section 2",
-          concepts: [
-            {
-              name: "concept of AP",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              name: "concept of AP 2",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-          questions: [
-            {
-              _id: "241234234",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "24234kjn234",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "sdih87387kjs",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Chapter 2",
-      sections: [
-        {
-          title: "Triangles",
-          concepts: [
-            {
-              name: "concept of triangles",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              name: "concept of triangles 2",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-          questions: [
-            {
-              _id: "sdkj98u9w8",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "sdu989sdulsdf9",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "lkjsf98398",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-        },
-        {
-          title: "Similarity of Triangles",
-          concepts: [
-            {
-              name: "concept of triangles",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              name: "concept of triangles 2",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-          questions: [
-            {
-              _id: "lkjsd987w89",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "9809ujsd98u",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "lsld98w298u",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Chapter 3",
-      sections: [
-        {
-          title: "Linear equations",
-          concepts: [
-            {
-              name: "concept of AP",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              name: "concept of AP 2",
-              description:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-          questions: [
-            {
-              _id: "jsdo9s8uiu",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-            {
-              _id: "posfdoifu",
-              statement:
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste eveniet doloribus ullam aliquid. ",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
 
 export default defineComponent({
   name: "SyllabusDetails",
@@ -355,6 +183,8 @@ export default defineComponent({
       SHOW_CONCEPT_FORM: false,
       SHOW_EDIT_QUESTION_FORM: false,
       editQuestionId: null,
+      SHOW_EDIT_CONCEPT_FORM: false,
+      editConceptId: null,
 
       SHOW_CHAPTER_INPUT: false,
       newChapterName: "",
@@ -368,36 +198,48 @@ export default defineComponent({
     };
   },
   async mounted() {
-    await this.getSyllabusById();
+    console.log(this.$route.params.id);
+    let syllabusId = this.$route.params.id;
+    await this.getSyllabusById(syllabusId);
   },
   methods: {
-    async getSyllabusById() {
-      let res = await SyllabusApi.getSyllabusById(this.syllabusId);
+    async getSyllabusById(id) {
+      let res = await SyllabusApi.getSyllabusById(id);
       this.syllabus = res;
     },
 
+    // question related functionality ...
     openQuestionModal(section) {
       this.managedSection = section;
       this.SHOW_QUESTION_FORM = true;
     },
-
-    openConceptModal(section) {
-      this.managedSection = section;
-      this.SHOW_CONCEPT_FORM = true;
-    },
-
     async addQuestionToSection(quesiton) {
       this.managedSection.questions.push(quesiton);
       this.managedSection = null;
       this.SHOW_QUESTION_FORM = false;
       await this.updateSyllabus();
     },
+    editQuestion(question) {
+      this.editQuestionId = question._id;
+      this.SHOW_EDIT_QUESTION_FORM = true;
+    },
+    removeQuesiton(questions, index) {
+      questions.splice(index, 1);
+    },
 
+    // concept related functionality ...
+    openConceptModal(section) {
+      this.managedSection = section;
+      this.SHOW_CONCEPT_FORM = true;
+    },
     async addConceptToSeciton(concept) {
       this.managedSection.concepts.push(concept);
       this.SHOW_CONCEPT_FORM = false;
       this.managedSection = null;
       await this.updateSyllabus();
+    },
+    removeConcept(concepts, index) {
+      concepts.splice(index, 1);
     },
 
     async updateSyllabus() {
@@ -422,6 +264,7 @@ export default defineComponent({
       // Need to add dialoge to decide if we need to remove the questions and concepts if the chapter or section is deleted
     },
 
+    // chapters functionality...
     confirmChapterName() {
       this.syllabus.chapters.push({
         title: this.newChapterName,
@@ -429,17 +272,14 @@ export default defineComponent({
       });
       this.closeNewChapterInput();
     },
-
     closeNewChapterInput() {
       this.SHOW_CHAPTER_INPUT = false;
       this.newChapterName = "";
     },
-
     closeNewSectionInput() {
       this.SHOW_SECTION_INPUT = false;
       this.newSectionTitle = "";
     },
-
     confirmSectionTitle(chapter) {
       chapter.sections.push({
         title: this.newSectionTitle,
@@ -448,7 +288,11 @@ export default defineComponent({
       });
       this.closeNewSectionInput();
     },
+    removeChapter(chapters, index) {
+      chapters.splice(index, 1);
+    },
 
+    // sections functionality ...
     editSectionTitle(section) {
       section.title = this.editedSectionTitle;
       delete section.editTitle;
@@ -456,11 +300,8 @@ export default defineComponent({
     cancelSectionTitleEdit(section) {
       delete section.editTitle;
     },
-
-    editConcept(concept) {},
-    editQuestion(question) {
-      this.editQuestionId = question._id;
-      this.SHOW_EDIT_QUESTION_FORM = true;
+    removeSection(sections, index) {
+      sections.splice(index, 1);
     },
   },
 });

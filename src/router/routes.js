@@ -16,6 +16,18 @@ const routes = [
       {
         path: "syllabus",
         component: () => import("pages/SyllabusManager.vue"),
+        children: [
+          { path: "", component: () => import("components/syllabus/SyllabusList.vue") },
+          {
+            path: "edit/:id",
+            name: "edit-syllabus",
+            component: () => import("components/syllabus/SyllabusDetails.vue"),
+          },
+        ],
+      },
+      {
+        path: "concepts",
+        component: () => import("pages/ConceptsPage.vue"),
       },
       {
         path: "test-component",
