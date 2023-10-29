@@ -30,7 +30,8 @@
                     <q-btn @click="cancelSectionTitleEdit(section)" icon="close" class="col-1"></q-btn>
                   </div>
                   <div class="text-h6" v-else>
-                    {{ section.title }} <q-btn @click="section.editTitle = true" class="q-ml-sm" icon="edit"></q-btn>
+                    {{ section.title }}
+                    <q-btn @click="section.editTitle = true" class="q-ml-sm" icon="edit"></q-btn>
                   </div>
                   <span>concepts </span>
                   <q-card class="q-my-md" v-for="(concept, index) in section.concepts" :key="concept.name">
@@ -53,10 +54,7 @@
                   <q-dialog v-model="SHOW_CONCEPT_FORM">
                     <q-card style="width: 80vw">
                       <q-card-section>
-                        <concept-form
-                          @concept-selected="addConceptToSeciton"
-                          :subject="syllabus.subject"
-                        ></concept-form>
+                        <add-concept @concept-selected="addConceptToSeciton" :subject="syllabus.subject"></add-concept>
                       </q-card-section>
                     </q-card>
                   </q-dialog>
@@ -86,7 +84,7 @@
                       <q-card-section>
                         <question-form
                           :syllabus-id="syllabus._id"
-                          :suggested-concepts="section"
+                          :suggested-concepts="managedSection"
                           @question-added="addQuestionToSection"
                         ></question-form>
                       </q-card-section>
@@ -154,14 +152,13 @@
       <q-btn label="Save" v-on:click="updateSyllabus" color="primary" class="fixed-bottom-right q-ma-lg"> </q-btn>
     </div>
   </div>
-  <div v-else>syllabus details</div>
 </template>
 
 <script>
 import SyllabusApi from "src/services/api/Syllabus.api";
 import { defineComponent } from "vue";
 import QuestionForm from "../questions/QuestionForm.vue";
-import ConceptForm from "../concepts/ConceptForm.vue";
+import AddConcept from "./AddConcept.vue";
 
 export default defineComponent({
   name: "SyllabusDetails",
@@ -176,7 +173,7 @@ export default defineComponent({
   //   }
   //   return { showUpdateSuccess };
   // },
-  components: { QuestionForm, ConceptForm },
+  components: { QuestionForm, AddConcept },
   data() {
     return {
       SHOW_QUESTION_FORM: false,
@@ -198,7 +195,6 @@ export default defineComponent({
     };
   },
   async mounted() {
-    console.log(this.$route.params.id);
     let syllabusId = this.$route.params.id;
     await this.getSyllabusById(syllabusId);
   },

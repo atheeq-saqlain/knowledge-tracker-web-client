@@ -48,10 +48,10 @@ const linksList = [
     link: "/admin/students",
   },
   {
-    title: "Forum",
-    caption: "forum.quasar.dev",
+    title: "Concepts",
+    caption: "View and manage concepts",
     icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
+    link: "/admin/concepts",
   },
   {
     title: "Twitter",
