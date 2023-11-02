@@ -27,7 +27,15 @@ const routes = [
       },
       {
         path: "concepts",
-        component: () => import("pages/ConceptsPage.vue"),
+        component: () => import("pages/concept/ConceptsPage.vue"),
+        children: [
+          { path: "", component: () => import("pages/concept/ConceptsList.vue") },
+          {
+            path: "edit/:id",
+            name: "edit-concept",
+            component: () => import("pages/concept/EditConcept.vue"),
+          },
+        ],
       },
       {
         path: "test-component",

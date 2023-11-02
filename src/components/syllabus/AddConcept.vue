@@ -5,7 +5,7 @@
     <select-concept v-model="existingConcept" @update:model-value="onConceptSelected"></select-concept>
     <q-separator class="q-my-md"> or </q-separator>
     <div class="text-caption">Create new concept</div>
-    <concept-form :subject="subject"></concept-form>
+    <concept-form :subject="subject" @concept-created="onConceptSelected"></concept-form>
   </div>
 </template>
 
@@ -16,6 +16,11 @@ import SelectConcept from "../concepts/SelectConcept.vue";
 export default {
   name: "AddConcept",
   props: ["subject", "concept"],
+  data() {
+    return {
+      existingConcept: null,
+    };
+  },
   components: { ConceptForm, SelectConcept },
   methods: {
     onConceptSelected(concept) {

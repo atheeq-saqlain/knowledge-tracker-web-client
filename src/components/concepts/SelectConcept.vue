@@ -5,7 +5,7 @@
       v-model="concept"
       use-input
       input-debounce="0"
-      label="Existing Concept"
+      :label="label || 'Existing Concept'"
       :options="concepts"
       @filter="filterFn"
       option-value="name"
@@ -29,12 +29,11 @@ import ConceptsApi from "src/services/api/Concepts.api";
 export default {
   name: "SelectConcept",
   props: {
-    sectionConcepts: {
-      type: Array,
-    },
-    required: {
-      type: Boolean,
-    },
+    label: { type: String },
+    sectionConcepts: { type: Array },
+    required: { type: Boolean },
+    modelValue: { type: Object },
+    resetAfterSelection: { type: Boolean, default: false },
   },
 
   data() {
@@ -70,6 +69,9 @@ export default {
 
     selectedOption(value) {
       this.$emit("update:modelValue", value);
+      if (this.resetAfterSelection) {
+        this.concept = null;
+      }
     },
   },
 };
