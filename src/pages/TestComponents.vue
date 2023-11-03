@@ -3,32 +3,31 @@
     <div class="row">
       <div class="col-8 q-pa-sm">
         <!-- Add the custom component here  -->
-        <!-- <select-concept :section-concepts="sectionConcepts" v-model="selectedConcept"></select-concept> -->
-        <question-form
-          syllabus-id="6470f66b633c23dfb7cde2f1"
-          :suggested-concepts-array="sectionConcepts"
-          @question-added="eventHandler"
-        ></question-form>
+        <!-- <create-syllabus-form></create-syllabus-form> -->
+        <!-- <login-form></login-form> -->
+        <concept-form v-if="existingConcept" subject="math" :existing-concept="existingConcept"></concept-form>
       </div>
-
       <div class="col q-pa-sm">
         <!-- Variable to check the value of the coomponent -->
         <div class="text-h6">component output values</div>
-        <span v-if="selectedConcept">{{ selectedConcept.name }}</span>
+        <span v-if="existingConcept">{{ existingConcept.name }}</span>
       </div>
     </div>
   </q-page>
 </template>
 
 <script>
-import SelectConcept from "src/components/concepts/SelectConcept.vue";
-import QuestionForm from "src/components/questions/QuestionForm.vue";
+import { mapState } from "pinia";
+import LoginForm from "src/components/authentication/LoginForm.vue";
+import ConceptForm from "src/components/concepts/ConceptForm.vue";
+import ConceptsApi from "src/services/api/Concepts.api";
+import { userStore } from "src/stores/user-store";
 
 export default {
-  components: { QuestionForm },
-
+  components: { ConceptForm },
   data() {
     return {
+      existingConcept: null,
       selectedConcept: null,
       sectionConcepts: [
         {
@@ -45,10 +44,19 @@ export default {
     };
   },
 
+  async mounted() {
+    let concepts = await ConceptsApi.getConcetps();
+    this.existingConcept = await ConceptsApi.getConcetpById(concepts[1]._id);
+  },
+
   methods: {
     eventHandler(val) {
       console.log("Event recived from component ... value :  ", val);
     },
+  },
+
+  computed: {
+    ...mapState(userStore, ["user"]),
   },
 };
 </script>
