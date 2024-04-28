@@ -7,11 +7,11 @@
           <div class="row justify-between">
             <div>{{ concept.name }}</div>
             <div class="q-gutter-sm">
-              <q-btn @click="viewConcept(concept)" icon="link"></q-btn>
+              <q-btn @click="viewConcept(concept)" icon="edit"></q-btn>
               <q-btn @click="showDeleteConfirmationDialoge(concept)" icon="delete"></q-btn>
             </div>
           </div>
-          <div>{{ concept.description }}</div>
+          <div>{{ concept.definition }}</div>
         </q-card-section>
       </q-card>
     </div>
@@ -32,7 +32,7 @@
     <q-dialog v-model="SHOW_CONCEPT_FORM">
       <q-card style="width: 80vw">
         <q-card-section>
-          <concept-form subject="math"></concept-form>
+          <concept-form @concept-created="onConceptCreated()" subject="math"></concept-form>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -76,6 +76,11 @@ export default {
     async deleteConcept() {
       await ConceptsApi.deleteConcept(this.conceptToDelete._id);
       this.concepts = await this.getConcepts();
+    },
+
+    onConceptCreated() {
+      this.SHOW_CONCEPT_FORM = false;
+      this.concepts = this.getConcepts();
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <concept-form v-if="concept" :existing-concept="concept"></concept-form>
+  <concept-form v-if="concept" @concept-updated="onConceptUpdated()" :existing-concept="concept"></concept-form>
 </template>
 
 <script>
@@ -17,6 +17,11 @@ export default {
   async mounted() {
     let conceptId = this.$route.params.id;
     this.concept = await ConceptsApi.getConcetpById(conceptId);
+  },
+  methods: {
+    onConceptUpdated() {
+      this.$router.back();
+    },
   },
 };
 </script>

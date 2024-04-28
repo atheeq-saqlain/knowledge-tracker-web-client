@@ -42,7 +42,7 @@
                           <q-btn @click="removeConcept(section.concepts, index)" icon="delete"></q-btn>
                         </div>
                       </div>
-                      <div>{{ concept.description }}</div>
+                      <div>{{ concept.definition }}</div>
                     </q-card-section>
                   </q-card>
 
@@ -98,7 +98,7 @@
                           :question-id="editQuestionId"
                           :syllabus-id="syllabus._id"
                           :suggested-concepts="section"
-                          @question-updated="getSyllabusById"
+                          @question-updated="onQuestionUpdated"
                         ></question-form>
                       </q-card-section>
                     </q-card>
@@ -218,6 +218,9 @@ export default defineComponent({
     editQuestion(question) {
       this.editQuestionId = question._id;
       this.SHOW_EDIT_QUESTION_FORM = true;
+    },
+    onQuestionUpdated() {
+      this.getSyllabusById(this.syllabus._id);
     },
     removeQuesiton(questions, index) {
       questions.splice(index, 1);
