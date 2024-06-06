@@ -1,18 +1,21 @@
 <template>
   <div>
     <div class="text-h6">Add Question</div>
-    <q-form class="q-gutter-sm" v-on:submit="submitQuestion" v-on:reset="resetQuestionForm">
-      <q-input v-model="questionStatment" label="Question statment" filled type="textarea" autogrow />
-      <q-input v-model="correctAnswer" label="Correct Answer" filled type="textarea" autogrow />
-      <q-input v-model="description" label="Description" filled type="textarea" autogrow />
-      <select-concept :section-concepts="suggestedConcepts.concepts" required v-model="concept"></select-concept>
-      <div>
-        <q-btn label="Update" v-if="questionId" type="submit" color="primary" />
-        <q-btn label="Submit" v-else type="submit" color="primary" />
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-      </div>
-    </q-form>
-    <div class="q-pa-md"></div>
+    <div class="row">
+      <q-form class="q-gutter-sm q-pa-sm col-6" v-on:submit="submitQuestion" v-on:reset="resetQuestionForm">
+        <q-input v-model="questionStatment" label="Question statment" filled type="textarea" autogrow />
+        <q-input v-model="correctAnswer" label="Correct Answer" filled type="textarea" autogrow />
+        <q-input v-model="description" label="Description" filled type="textarea" autogrow />
+        <select-concept :section-concepts="suggestedConcepts.concepts" required v-model="concept"></select-concept>
+        <div>
+          <q-btn label="Update" v-if="questionId" type="submit" color="primary" />
+          <q-btn label="Submit" v-else type="submit" color="primary" />
+          <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        </div>
+      </q-form>
+      <!-- <div class="q-pa-md"></div> -->
+      <QuestionRender class="col-6 q-pa-sm" :question="questionStatment" :key="questionStatment"></QuestionRender>
+    </div>
   </div>
 </template>
 
@@ -20,12 +23,13 @@
 import QuestionsApi from "src/services/api/Questions.api";
 import { defineComponent, ref } from "vue";
 import SelectConcept from "../concepts/SelectConcept.vue";
+import QuestionRender from "./QuestionRender.vue";
 
 export default defineComponent({
   // setup() {
   //   return { text: ref() };
   // },
-  components: { SelectConcept },
+  components: { SelectConcept, QuestionRender },
   name: "QuestionForm",
   data() {
     return {

@@ -79,7 +79,7 @@
                     <q-btn class="text-primary" outline v-on:click="openQuestionModal(section)">Add Question</q-btn>
                   </div>
 
-                  <q-dialog v-model="SHOW_QUESTION_FORM">
+                  <q-dialog full-width full-height v-model="SHOW_QUESTION_FORM">
                     <q-card style="width: 80vw">
                       <q-card-section>
                         <question-form
