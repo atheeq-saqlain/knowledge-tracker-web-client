@@ -32,7 +32,7 @@
     <q-dialog v-model="SHOW_CONCEPT_FORM">
       <q-card style="width: 80vw">
         <q-card-section>
-          <concept-form @concept-created="onConceptCreated()" subject="math"></concept-form>
+          <concept-form @concept-created="onConceptCreated()"></concept-form>
         </q-card-section>
       </q-card>
     </q-dialog>

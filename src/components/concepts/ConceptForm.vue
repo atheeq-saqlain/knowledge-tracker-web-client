@@ -51,7 +51,7 @@ import SelectConcept from "./SelectConcept.vue";
 export default {
   name: "ConceptForm",
 
-  props: ["subject", "existingConcept"],
+  props: ["existingConcept"],
 
   components: { SelectConcept },
 
@@ -80,7 +80,6 @@ export default {
         name: this.name,
         definition: this.definition,
         description: this.description,
-        subject: this.subject,
         preRequisitConcepts: this.preRequisitConcepts,
       };
       let createdConcept = await ConceptsApi.createConcept(newConcept);
@@ -120,7 +119,6 @@ export default {
         name: this.name,
         definition: this.definition,
         description: this.description,
-        subject: this.subject,
         preRequisitConcepts: this.preRequisitConcepts,
       };
       let updatedConcept = await ConceptsApi.updateConcept(this.existingConcept._id, concept);
