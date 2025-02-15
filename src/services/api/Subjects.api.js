@@ -5,12 +5,20 @@ export default {
     return (await api.get("subjects")).data;
   },
 
+  async getRootSubjects() {
+    return (await api.get("subjects?rootonly=true")).data;
+  },
+
   async createSubject(body) {
     return (await api.post("subjects", body)).data;
   },
 
   async getSubject(subjectId) {
     return (await api.get(`subjects/${subjectId}`)).data;
+  },
+
+  async getChildrenSubjects(parentId) {
+    return (await api.get(`subjects/children/${parentId}`)).data;
   },
 
   async searchSubjects(searchText) {

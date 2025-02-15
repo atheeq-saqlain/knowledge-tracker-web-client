@@ -37,6 +37,12 @@ const ConceptsPage = {
     },
   ],
 };
+
+const SubjectsPage = {
+  path: "subjects",
+  component: () => import("pages/SubjectsPage.vue"),
+  children: [{ path: "", component: () => import("src/components/subjects/SubjectTree.vue") }],
+};
 const TestComponentPage = { path: "test-component", component: () => import("pages/TestComponents.vue") };
 
 const routes = [
@@ -48,7 +54,7 @@ const routes = [
   {
     path: "/admin",
     component: () => import("layouts/MainLayout.vue"),
-    children: [IndexPage, StudentsManager, SyllabusManager, ConceptsPage, TestComponentPage],
+    children: [IndexPage, StudentsManager, SyllabusManager, ConceptsPage, TestComponentPage, SubjectsPage],
     meta: { requiresAuth: true },
   },
   // {

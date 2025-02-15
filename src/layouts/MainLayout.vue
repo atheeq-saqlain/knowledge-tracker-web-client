@@ -54,10 +54,10 @@ const linksList = [
     link: "/admin/concepts",
   },
   {
-    title: "Twitter",
-    caption: "@quasarframework",
+    title: "Subjects",
+    caption: "Veiw and manage Subjects",
     icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
+    link: "/admin/subjects",
   },
   {
     title: "Facebook",
