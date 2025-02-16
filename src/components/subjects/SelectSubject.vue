@@ -5,7 +5,7 @@
       use-input
       input-debounce="500"
       v-model="selectedSubject"
-      label="Subject"
+      :label="label || 'Subject'"
       :options="subjects"
       @filter="filterFn"
       option-label="name"
@@ -31,6 +31,13 @@ export default {
       selectedSubject: null,
       subjects: [],
     };
+  },
+
+  props: {
+    label: {
+      type: String,
+      default: "",
+    },
   },
 
   async mounted() {
