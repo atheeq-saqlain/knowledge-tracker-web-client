@@ -114,7 +114,7 @@ export default {
     async updateSubject() {
       let subjectPayload = {
         name: this.name,
-        parentSubject: this.parentSubject,
+        parentSubject: this.parentSubject._id,
         definition: this.definition,
         description: this.description,
         concepts: this.concepts,
