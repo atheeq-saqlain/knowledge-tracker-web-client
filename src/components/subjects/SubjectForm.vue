@@ -114,12 +114,14 @@ export default {
     async updateSubject() {
       let subjectPayload = {
         name: this.name,
-        parentSubject: this.parentSubject._id,
         definition: this.definition,
         description: this.description,
         concepts: this.concepts,
         questions: this.questions,
       };
+      if (this.parentSubject) {
+        subjectPayload.parentSubject = this.parentSubject._id;
+      }
       let updatedSubject = await SubjectsApi.updateSubject(this.existingSubject._id, subjectPayload);
       this.$emit("subjectUpdated", updatedSubject);
     },
