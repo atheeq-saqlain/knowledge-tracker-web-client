@@ -5,6 +5,10 @@ export default {
     return (await api.post("students", studentData)).data;
   },
 
+  async getStudentByUser(userId) {
+    return (await api.get(`students/user/${userId}`)).data;
+  },
+
   async getStudents() {
     return (await api.get("students")).data;
   },

@@ -60,10 +60,10 @@ const linksList = [
     link: "/admin/subjects",
   },
   {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
+    title: "Learn",
+    caption: "Manage and track learning",
+    icon: "school",
+    link: "/admin/learning-management",
   },
   {
     title: "Quasar Awesome",
