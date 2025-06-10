@@ -1,6 +1,6 @@
 {
   "name": "learning-tracker-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "client side for the learning tracker project",
   "productName": "learningtracker",
   "author": "atheeq saqlain <atheeqsaqlain@gmail.com>",

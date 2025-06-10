@@ -37,7 +37,7 @@ export const userStore = defineStore("user", {
     },
     async routeUserToHome(user) {
       if (user.roles.includes("admin")) {
-        this.router.push("/admin");
+        this.router.push("/index");
       } else if (user.roles.includes("content-moderator")) {
         this.router.push("/content-moderator");
       } else {
