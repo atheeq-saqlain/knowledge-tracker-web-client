@@ -4,14 +4,26 @@
       <q-input v-model="name" label="Concept name" filled type="text" />
       <q-input v-model="definition" label="Definition" filled type="textarea" autogrow />
       <q-input v-model="description" label="Description" filled type="textarea" autogrow />
-      <select-concept
-        :reset-after-selection="true"
-        label="Search and add pre-requisite concept"
-        v-model="selectedPreConcept"
-        @update:model-value="onConceptSelected"
-      ></select-concept>
+
+      <div class="text-h5 q-mt-lg">Subjects</div>
       <div class="q-gutter-sm">
-        <span class="text-h6">pre requisit concepts</span>
+        <q-card v-for="subject in subjects" :key="subject._id">
+          <q-card-section>
+            <div class="row justify-between">
+              <div>{{ subject.name }}</div>
+              <div><button @click="removeSubject(subject)">Del</button></div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+      <select-subject
+        label="Serch and add subject"
+        clear-on-select
+        @subject-selected="onSubjectSelected"
+      ></select-subject>
+
+      <div class="text-h5 q-mt-lg">Pre requisite concepts</div>
+      <div class="q-gutter-sm">
         <q-card v-for="concept in preRequisitConcepts" :key="concept._id">
           <q-card-section>
             <div>
@@ -21,6 +33,13 @@
           </q-card-section>
         </q-card>
       </div>
+      <select-concept
+        :reset-after-selection="true"
+        label="Search and add pre-requisite concept"
+        v-model="selectedPreConcept"
+        @update:model-value="onConceptSelected"
+      ></select-concept>
+
       <div>
         <q-btn v-if="existingConcept" label="Update" type="submit" color="primary" />
         <q-btn v-else label="Submit" type="submit" color="primary" />
@@ -47,13 +66,14 @@
 <script>
 import ConceptsApi from "src/services/api/Concepts.api";
 import SelectConcept from "./SelectConcept.vue";
+import SelectSubject from "../subjects/SelectSubject.vue";
 
 export default {
   name: "ConceptForm",
 
   props: ["existingConcept"],
 
-  components: { SelectConcept },
+  components: { SelectConcept, SelectSubject },
 
   data() {
     return {
@@ -62,6 +82,7 @@ export default {
       description: "",
       selectedPreConcept: null,
       preRequisitConcepts: [],
+      subjects: [],
       SHOW_DELETE_CONFIRMATION: false,
     };
   },
@@ -71,6 +92,14 @@ export default {
   },
 
   methods: {
+    onSubjectSelected(subject) {
+      this.subjects.push(subject);
+    },
+
+    removeSubject(subject) {
+      this.subjects.splice(this.subjects.indexOf(subject), 1);
+    },
+
     async submitConcept() {
       if (this.existingConcept) {
         await this.updateConcept();
@@ -81,6 +110,7 @@ export default {
         definition: this.definition,
         description: this.description,
         preRequisitConcepts: this.preRequisitConcepts,
+        subjects: this.subjects,
       };
       let createdConcept = await ConceptsApi.createConcept(newConcept);
       this.$emit("conceptCreated", createdConcept);
@@ -106,6 +136,7 @@ export default {
         this.definition = this.existingConcept.definition;
         this.description = this.existingConcept.description;
         this.preRequisitConcepts = this.existingConcept.preRequisitConcepts;
+        this.subjects = this.existingConcept.subjects;
       } else {
         this.name = "";
         this.definition = "";
@@ -120,6 +151,7 @@ export default {
         definition: this.definition,
         description: this.description,
         preRequisitConcepts: this.preRequisitConcepts,
+        subjects: this.subjects,
       };
       let updatedConcept = await ConceptsApi.updateConcept(this.existingConcept._id, concept);
       this.$emit("conceptUpdated", updatedConcept);

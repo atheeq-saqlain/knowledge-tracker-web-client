@@ -38,6 +38,10 @@ export default {
       type: String,
       default: "",
     },
+    clearOnSelect: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   async mounted() {
@@ -68,6 +72,9 @@ export default {
     onSubjectSelected(subject) {
       this.$emit("subject-selected", subject);
       // this.selectedSubject = subject;
+      if (this.clearOnSelect) {
+        this.selectedSubject = null;
+      }
     },
   },
 };
