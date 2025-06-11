@@ -5,7 +5,7 @@
     <!-- <router-view></router-view> -->
 
     <!-- list of subjects -->
-    <q-card class="q-mt-md" v-for="subject in studentProgress" :key="subject._id">
+    <!-- <q-card class="q-mt-md" v-for="subject in studentProgress" :key="subject._id">
       <q-card-section>
         <div class="row justify-between">
           <div class="text-h6">{{ subject.name }} - {{ subject.mastery }}%</div>
@@ -13,11 +13,18 @@
         </div>
         <q-linear-progress :value="subject.mastery / 100" class="q-mt-md" />
       </q-card-section>
+    </q-card> -->
+
+    <q-card class="q-mt-md" v-for="subject in subjects" :key="subject._id">
+      <q-card-section>
+        <student-subject-progress :progress-tree="studentProgress"></student-subject-progress>
+      </q-card-section>
     </q-card>
   </q-page>
 </template>
 
 <script>
+import StudentSubjectProgress from "src/components/students/StudentSubjectProgress.vue";
 import SelectSubject from "src/components/subjects/SelectSubject.vue";
 import StudentsApi from "src/services/api/Students.api";
 import { userStore } from "src/stores/user-store";
@@ -28,6 +35,7 @@ export default {
 
   components: {
     SelectSubject,
+    StudentSubjectProgress,
   },
 
   data() {
