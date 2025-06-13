@@ -4,20 +4,13 @@
     <select-subject v-on:subject-selected="onSubjectSelected"></select-subject>
     <!-- <router-view></router-view> -->
 
-    <!-- list of subjects -->
-    <!-- <q-card class="q-mt-md" v-for="subject in studentProgress" :key="subject._id">
+    <q-card class="q-mt-md" v-for="(subject, index) in studentProgress" :key="index">
       <q-card-section>
-        <div class="row justify-between">
-          <div class="text-h6">{{ subject.name }} - {{ subject.mastery }}%</div>
-          <button class="text-primary" v-on:click="removeSubject(subject)">Del</button>
+        <div class="row justify-end">
+          <!-- <i class="delete"></i> -->
+          <q-btn class="text-danger" size="sm" flat icon="delete" v-on:click="removeSubject(subject)"></q-btn>
         </div>
-        <q-linear-progress :value="subject.mastery / 100" class="q-mt-md" />
-      </q-card-section>
-    </q-card> -->
-
-    <q-card class="q-mt-md" v-for="subject in subjects" :key="subject._id">
-      <q-card-section>
-        <student-subject-progress :progress-tree="studentProgress"></student-subject-progress>
+        <student-subject-progress :progress-tree="[subject]"></student-subject-progress>
       </q-card-section>
     </q-card>
   </q-page>

@@ -68,7 +68,7 @@ const linksList = [
   {
     title: "Questions",
     caption: "Manage questions",
-    icon: "question",
+    icon: "question_answer",
     link: "/index/questions",
   },
 ];
