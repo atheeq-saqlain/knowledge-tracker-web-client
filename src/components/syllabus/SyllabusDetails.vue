@@ -83,7 +83,6 @@
                     <q-card style="width: 80vw">
                       <q-card-section>
                         <question-form
-                          :syllabus-id="syllabus._id"
                           :suggested-concepts="managedSection"
                           @question-added="addQuestionToSection"
                         ></question-form>
@@ -96,7 +95,6 @@
                       <q-card-section>
                         <question-form
                           :question-id="editQuestionId"
-                          :syllabus-id="syllabus._id"
                           :suggested-concepts="section"
                           @question-updated="onQuestionUpdated"
                         ></question-form>

@@ -66,10 +66,10 @@ const linksList = [
     link: "/index/learning-management",
   },
   {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
+    title: "Questions",
+    caption: "Manage questions",
+    icon: "question",
+    link: "/index/questions",
   },
 ];
 

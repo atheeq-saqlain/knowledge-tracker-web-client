@@ -6,7 +6,26 @@
         <q-input v-model="questionStatment" label="Question statment" filled type="textarea" autogrow />
         <q-input v-model="correctAnswer" label="Correct Answer" filled type="textarea" autogrow />
         <q-input v-model="description" label="Description" filled type="textarea" autogrow />
-        <select-concept :section-concepts="suggestedConcepts.concepts" required v-model="concept"></select-concept>
+        <select-concept
+          :section-concepts="suggestedConcepts ? suggestedConcepts.concepts : null"
+          required
+          v-model="concept"
+        ></select-concept>
+        <select-subject
+          v-if="!subject"
+          label="Serch and add subject"
+          @subject-selected="onSubjectSelected"
+        ></select-subject>
+        <q-card v-else>
+          <q-card-section>
+            <div class="row">
+              <div class="col-10">{{ subject.name }}</div>
+              <div class="col-2">
+                <q-btn class="col-2" flat icon="close" @click="subject = null"></q-btn>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <div>
           <q-btn label="Update" v-if="questionId" type="submit" color="primary" />
           <q-btn label="Submit" v-else type="submit" color="primary" />
@@ -24,12 +43,13 @@ import QuestionsApi from "src/services/api/Questions.api";
 import { defineComponent, ref } from "vue";
 import SelectConcept from "../concepts/SelectConcept.vue";
 import QuestionRender from "./QuestionRender.vue";
+import SelectSubject from "../subjects/SelectSubject.vue";
 
 export default defineComponent({
   // setup() {
   //   return { text: ref() };
   // },
-  components: { SelectConcept, QuestionRender },
+  components: { SelectConcept, QuestionRender, SelectSubject },
   name: "QuestionForm",
   data() {
     return {
@@ -37,14 +57,11 @@ export default defineComponent({
       correctAnswer: "",
       description: "",
       concept: null,
+      subject: null,
       originalQuestion: null,
     };
   },
   props: {
-    syllabusId: {
-      type: String,
-      required: true,
-    },
     suggestedConcepts: {
       type: Object,
     },
@@ -62,6 +79,10 @@ export default defineComponent({
   },
 
   methods: {
+    onSubjectSelected(subject) {
+      this.subject = subject;
+    },
+
     async submitQuestion() {
       if (this.questionId) {
         this.updateQuestion();
@@ -71,8 +92,8 @@ export default defineComponent({
         statement: this.questionStatment,
         correctAnswer: this.correctAnswer,
         description: this.description,
-        syllabus: this.syllabusId,
         coreConcept: this.concept._id,
+        subject: this.subject._id,
       };
       let addedQuestion = await QuestionsApi.addQuesiton(newQuestion);
       this.$emit("questionAdded", addedQuestion);
@@ -84,11 +105,13 @@ export default defineComponent({
         this.correctAnswer = this.originalQuestion.correctAnswer;
         this.description = this.originalQuestion.description;
         this.concept = this.originalQuestion.concept;
+        this.subject = this.originalQuestion.subject;
       } else {
         this.questionStatment = "";
         this.correctAnswer = "";
         this.description = "";
         this.concept = null;
+        this.subject = null;
       }
     },
 
@@ -97,8 +120,8 @@ export default defineComponent({
         statement: this.questionStatment,
         correctAnswer: this.correctAnswer,
         description: this.description,
-        syllabus: this.syllabusId,
         coreConcept: this.concept._id,
+        subject: this.subject._id,
       };
       let savedQuestion = await QuestionsApi.updateQuestion(updatedQuestion, this.originalQuestion._id);
       this.$emit("questionUpdated", savedQuestion);

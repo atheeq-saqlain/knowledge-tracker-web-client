@@ -44,6 +44,24 @@ const SubjectsPage = {
   children: [{ path: "", component: () => import("src/components/subjects/SubjectTree.vue") }],
 };
 
+const QuestionsPage = {
+  path: "questions",
+  component: () => import("pages/QuestionsManagementPage.vue"),
+  children: [
+    { path: "", component: () => import("src/components/questions/ListQuestions.vue") },
+    {
+      path: "edit/:questionId",
+      name: "edit-question",
+      component: () => import("src/components/questions/EditQuestion.vue"),
+    },
+    {
+      path: "create",
+      name: "create-question",
+      component: () => import("src/components/questions/CreateQuestion.vue"),
+    },
+  ],
+};
+
 const LearningManagementPage = {
   path: "learning-management",
   component: () => import("pages/LearningManagementPage.vue"),
@@ -68,6 +86,7 @@ const routes = [
       TestComponentPage,
       SubjectsPage,
       LearningManagementPage,
+      QuestionsPage,
     ],
     meta: { requiresAuth: true },
   },
