@@ -5,12 +5,15 @@
         <!-- Add the custom component here  -->
         <!-- <create-syllabus-form></create-syllabus-form> -->
         <!-- <login-form></login-form> -->
-        <concept-form v-if="existingConcept" subject="math" :existing-concept="existingConcept"></concept-form>
+        <!-- <concept-form v-if="existingConcept" :existing-concept="null"></concept-form> -->
+        <!-- <student-card :student="{ name: 'John Doe' }"></student-card> -->
+        <!-- <select-subject @subject-selected="eventHandler"></select-subject> -->
+        <subject-form @createSubject="eventHandler($event, 'test')"></subject-form>
       </div>
       <div class="col q-pa-sm">
         <!-- Variable to check the value of the coomponent -->
         <div class="text-h6">component output values</div>
-        <span v-if="existingConcept">{{ existingConcept.name }}</span>
+        <span v-if="result">{{ result }}</span>
       </div>
     </div>
   </q-page>
@@ -20,13 +23,17 @@
 import { mapState } from "pinia";
 import LoginForm from "src/components/authentication/LoginForm.vue";
 import ConceptForm from "src/components/concepts/ConceptForm.vue";
+import StudentCard from "src/components/students/StudentCard.vue";
+import SelectSubject from "src/components/subjects/SelectSubject.vue";
+import SubjectForm from "src/components/subjects/SubjectForm.vue";
 import ConceptsApi from "src/services/api/Concepts.api";
 import { userStore } from "src/stores/user-store";
 
 export default {
-  components: { ConceptForm },
+  components: { SubjectForm },
   data() {
     return {
+      result: null,
       existingConcept: null,
       selectedConcept: null,
       sectionConcepts: [
@@ -50,8 +57,13 @@ export default {
   },
 
   methods: {
-    eventHandler(val) {
-      console.log("Event recived from component ... value :  ", val);
+    eventHandler(val, data) {
+      console.log("arguments :  ", data);
+      console.log("Event recived from component ... value :  ", val.name);
+      this.result = {
+        value: val,
+        args: data,
+      };
     },
   },
 

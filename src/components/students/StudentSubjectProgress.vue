@@ -3,7 +3,10 @@
     <q-tree accordion :nodes="subjects" node-key="name" label-key="name">
       <template v-slot:default-header="prop">
         <div class="col-12">
-          <div>{{ prop.node.name }} - {{ prop.node.mastery }}%</div>
+          <div>
+            <span> {{ prop.node.name }} - {{ prop.node.mastery }}% </span>
+            <button @click.stop="learnSubject(prop.node)">Learn</button>
+          </div>
           <q-linear-progress :value="prop.node.mastery / 100" class="q-mt-md" />
         </div>
       </template>
@@ -27,6 +30,20 @@ export default {
     if (this.progressTree) {
       this.subjects = this.progressTree;
     }
+  },
+
+  methods: {
+    learnSubject(subject) {
+      // this.$emit("learnSubject", subject);
+      console.log("subject : ", subject);
+      this.$router.push({
+        name: "learning-subject",
+        params: {
+          // studentId: this.studentId,
+          subjectId: subject._id,
+        },
+      });
+    },
   },
 };
 </script>

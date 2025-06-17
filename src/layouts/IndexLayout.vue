@@ -63,7 +63,7 @@ const linksList = [
     title: "Learn",
     caption: "Manage and track learning",
     icon: "school",
-    link: "/index/learning-management",
+    link: "/index/learning",
   },
   {
     title: "Questions",
