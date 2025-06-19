@@ -72,6 +72,11 @@ const LearningManagementPage = {
       path: "subject/:subjectId",
       component: () => import("src/components/students/LearnSubject.vue"),
     },
+    {
+      name: "evaluate-question",
+      path: "question/:questionId",
+      component: () => import("src/components/students/EvaluateQuestion.vue"),
+    },
   ],
 };
 const TestComponentPage = { path: "test-component", component: () => import("pages/TestComponents.vue") };

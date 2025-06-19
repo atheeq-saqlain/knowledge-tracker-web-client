@@ -5,18 +5,22 @@
     </div>
 
     <div class="q-mt-lg q-gutter-sm">
-      <div class="text-h5">Concepts to learn</div>
-      <q-card v-for="conceptData in subjectLearning.conceptTrackers" :key="conceptData.id">
+      <div class="text-h5">Concepts</div>
+
+      <concept-trackers
+        @conceptTrackerAdded="onTrackerAdd"
+        :concept-trackers="subjectLearning.conceptTrackers"
+      ></concept-trackers>
+    </div>
+
+    <div class="q-mt-lg q-gutter-sm">
+      <div class="text-h5">Questions</div>
+      <q-card v-for="question in subjectLearning.questions" :key="question.id">
         <q-card-section>
-          <span class="text-h6"
-            >{{ conceptData.concept.name }} - {{ (conceptData.conceptTracker.masteryLevel * 100) / 5 }}%</span
-          >
-          <div>
-            <q-linear-progress :value="conceptData.conceptTracker.masteryLevel / 5" class="q-my-lg" />
-          </div>
+          <span class="text-body1">{{ question.statement }}</span>
+
           <div class="row justify-end q-gutter-md">
-            <q-btn @click="addTracker(conceptData.concept, 0)">Reset</q-btn>
-            <q-btn color="primary" @click="addTracker(conceptData.concept, 5)">Done</q-btn>
+            <q-btn color="primary" @click="goToEvaluateQuestion(question)">Evaluate</q-btn>
           </div>
         </q-card-section>
       </q-card>
@@ -26,11 +30,14 @@
 
 <script>
 import ConceptTrackerApi from "src/services/api/ConceptTracker.api";
+import ConceptTrackers from "../conceptTrackers/ConceptTrackers.vue";
 import { userStore } from "src/stores/user-store";
 const store = userStore();
 
 export default {
   name: "LearnSubject",
+
+  components: { ConceptTrackers },
 
   data() {
     return {
@@ -58,14 +65,17 @@ export default {
       return subjectLearning;
     },
 
-    async addTracker(concept, score) {
-      let tracker = await ConceptTrackerApi.addConceptTracker({
-        concept: concept._id,
-        student: this.user.student,
-        masteryLevel: score,
-      });
+    async onTrackerAdd(data) {
       this.subjectLearning = await this.getSubjectLearning(this.$route.params.subjectId);
-      return tracker;
+    },
+
+    goToEvaluateQuestion(question) {
+      this.$router.push({
+        name: "evaluate-question",
+        params: {
+          questionId: question._id,
+        },
+      });
     },
   },
 };

@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h6>Question Render</h6>
     <p>
-      {{ question }}
+      {{ question.statement }}
     </p>
   </div>
 </template>

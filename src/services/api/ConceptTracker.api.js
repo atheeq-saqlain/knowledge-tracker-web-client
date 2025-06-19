@@ -8,4 +8,8 @@ export default {
   async getSubjcetLearning(payload) {
     return (await api.post(`concepts-tracker/subject/learn`, payload)).data;
   },
+
+  async getQuestionLearning(payload) {
+    return (await api.post(`concepts-tracker/question/learn`, payload)).data;
+  },
 };

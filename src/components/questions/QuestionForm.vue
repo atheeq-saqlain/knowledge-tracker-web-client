@@ -33,7 +33,11 @@
         </div>
       </q-form>
       <!-- <div class="q-pa-md"></div> -->
-      <QuestionRender class="col-6 q-pa-sm" :question="questionStatment" :key="questionStatment"></QuestionRender>
+      <QuestionRender
+        class="col-6 q-pa-sm"
+        :question="{ statement: questionStatment }"
+        :key="questionStatment"
+      ></QuestionRender>
     </div>
   </div>
 </template>
