@@ -5,7 +5,7 @@
         <div class="col-12">
           <div>
             <span> {{ prop.node.name }} - {{ prop.node.mastery }}% </span>
-            <button @click.stop="learnSubject(prop.node)">Learn</button>
+            <button v-if="prop.node.concepts.length" @click.stop="learnSubject(prop.node)">Learn</button>
           </div>
           <q-linear-progress :value="prop.node.mastery / 100" class="q-mt-md" />
         </div>
