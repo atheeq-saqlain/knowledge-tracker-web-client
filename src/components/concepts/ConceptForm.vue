@@ -3,7 +3,11 @@
     <q-form class="q-gutter-sm" v-on:submit="submitConcept" v-on:reset="resetConceptForm">
       <q-input v-model="name" label="Concept name" filled type="text" />
       <q-input v-model="definition" label="Definition" filled type="textarea" autogrow />
-      <q-input v-model="description" label="Description" filled type="textarea" autogrow />
+
+      <div class="q-mt-lg">
+        <span class="text-h6">Description</span>
+        <q-editor :readonly="true" v-model="description" min-height="5rem" />
+      </div>
 
       <div class="text-h5 q-mt-lg">Subjects</div>
       <div class="q-gutter-sm">
@@ -27,8 +31,8 @@
         <q-card v-for="concept in preRequisitConcepts" :key="concept._id">
           <q-card-section>
             <div>
-              <div>{{ concept.name }}</div>
-              <div>{{ concept.description }}</div>
+              <div class="text-h6">{{ concept.name }}</div>
+              <div>{{ concept.definition }}</div>
             </div>
           </q-card-section>
         </q-card>
