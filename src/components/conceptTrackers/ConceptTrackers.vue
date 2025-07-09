@@ -3,10 +3,16 @@
     <q-card v-for="conceptData in conceptTrackers" :key="conceptData.id">
       <q-card-section>
         <span class="text-h6"
-          >{{ conceptData.concept.name }} - {{ (conceptData.conceptTracker.masteryLevel * 100) / 5 }}%</span
-        >
+          >{{ conceptData.concept.name }} -
+          <span v-if="conceptData.conceptTracker">{{ (conceptData.conceptTracker.masteryLevel * 100) / 5 }}%</span>
+        </span>
         <div>
-          <q-linear-progress :value="conceptData.conceptTracker.masteryLevel / 5" class="q-my-lg" />
+          <q-linear-progress
+            v-if="conceptData.conceptTracker"
+            :value="conceptData.conceptTracker.masteryLevel / 5"
+            class="q-my-lg"
+          />
+          <q-linear-progress v-else :value="0" class="q-my-lg" />
         </div>
         <div class="row justify-end q-gutter-md">
           <q-btn @click="addTracker(conceptData.concept, 0)">Reset</q-btn>

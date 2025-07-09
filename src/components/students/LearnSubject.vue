@@ -8,6 +8,7 @@
       <div class="text-h5">Concepts</div>
 
       <concept-trackers
+        v-if="subjectLearning"
         @conceptTrackerAdded="onTrackerAdd"
         :concept-trackers="subjectLearning.conceptTrackers"
       ></concept-trackers>
